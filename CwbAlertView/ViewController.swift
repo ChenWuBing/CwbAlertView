@@ -9,6 +9,7 @@ class ViewController: UIViewController {
     }
     @IBAction func action1(_ sender: UIButton) {
         let cwbAlertView = CWBAlertView.init(title: "温馨提示", message: "这是一个仿系统alert的弹框", preferredStyle: .alert)
+        cwbAlertView.titleColor = UIColor.red
         
         let cwbAction1 = CWBAlertAction.init(title: "按钮1", style: .default) { (_) in
             print("点击按钮1")

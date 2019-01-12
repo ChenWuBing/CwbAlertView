@@ -14,8 +14,16 @@ class CWBAlertView: UIButton {
     fileprivate var centerView = UIView()
     ///标题
     fileprivate var title:String?
+    ///标题字体颜色
+    var titleColor = UIColor.black
+    ///标题字体大小
+    var titleFont:CGFloat = 15.0
     ///提示信息
     fileprivate var message:String?
+    ///提示信息字体颜色
+    var messageColor = UIColor.init(red: 65/255, green: 65/255, blue: 65/255, alpha: 1)
+    ///提示信息字体大小
+    var messageFont:CGFloat = 14.0
     ///弹窗类型
     fileprivate var type:CWBAlertViewStyle!
     ///按钮个数
@@ -63,24 +71,25 @@ class CWBAlertView: UIButton {
         self.centerView.backgroundColor = UIColor.white
         
         if self.title != nil {
-            titleHeight = self.calculateStringSize(str: self.title!, maW: centerViewWidth - 10, maH: 10000, fontSize: 15.0).height
+            titleHeight = self.calculateStringSize(str: self.title!, maW: centerViewWidth - 10, maH: 10000, fontSize: self.titleFont).height
             //标题
             let titleLabel = UILabel.init(frame: CGRect.init(x: 5, y: 15, width: centerViewWidth - 10, height: titleHeight))
             titleLabel.textAlignment = .center
             titleLabel.numberOfLines = 0
-            titleLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
+            titleLabel.font = UIFont.boldSystemFont(ofSize: self.titleFont)
             titleLabel.text = self.title!
+            titleLabel.textColor = self.titleColor
             self.centerView.addSubview(titleLabel)
         }
         if self.message != nil {
             //提示语
-            messageHeight = self.calculateStringSize(str: self.message!, maW: centerViewWidth - 30, maH: 10000, fontSize: 14.0).height
-            let messageLabel = UILabel.init(frame: CGRect.init(x: 15, y: titleHeight != 0 ? titleHeight + 20 : 15, width: centerViewWidth - 30, height: messageHeight))
+            messageHeight = self.calculateStringSize(str: self.message!, maW: centerViewWidth - 30, maH: 10000, fontSize: self.messageFont).height
+            let messageLabel = UILabel.init(frame: CGRect.init(x: 15, y: titleHeight != 0 ? titleHeight + 25 : 15, width: centerViewWidth - 30, height: messageHeight))
             messageLabel.textAlignment = .center
             messageLabel.numberOfLines = 0
             messageLabel.text = self.message!
-            messageLabel.font = UIFont.systemFont(ofSize: 14.0)
-            messageLabel.textColor = UIColor.init(red: 65/255, green: 65/255, blue: 65/255, alpha: 1)
+            messageLabel.font = UIFont.systemFont(ofSize: self.messageFont)
+            messageLabel.textColor = self.messageColor
             self.centerView.addSubview(messageLabel)
         }
         
@@ -163,7 +172,7 @@ class CWBAlertView: UIButton {
             textView.text = message
             textView.isScrollEnabled = true
             textView.isEditable = false
-            textView.font = UIFont.systemFont(ofSize: 14.0)
+            textView.font = UIFont.systemFont(ofSize: self.messageFont)
             self.centerView.addSubview(textView)
             self.addSubview(self.centerView)
             UIView.animate(withDuration: 0.3) {
@@ -246,9 +255,15 @@ class CWBAlertAction : UIButton{
     //标题
     var title:String?
     //事件
-    var handler:((CWBAlertAction) -> Swift.Void)?
+    fileprivate var handler:((CWBAlertAction) -> Swift.Void)?
     //文字颜色
     var textColor:UIColor?{
+        didSet {
+            self.layoutSubviews()
+        }
+    }
+    //文字大小
+    var textFont:CGFloat?{
         didSet {
             self.layoutSubviews()
         }
@@ -281,7 +296,7 @@ class CWBAlertAction : UIButton{
             
             titleLabel.textAlignment = .center
             titleLabel.text = self.title!
-            titleLabel.font = UIFont.systemFont(ofSize:  16.0)
+            titleLabel.font = self.textFont == nil ? UIFont.systemFont(ofSize:  16.0) : UIFont.systemFont(ofSize:  self.textFont!)
             self.addSubview(titleLabel)
         }
     }
